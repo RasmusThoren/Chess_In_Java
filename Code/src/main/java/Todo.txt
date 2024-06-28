@@ -1,0 +1,6 @@
+- Create function to declare legal moves
+- Create function to move a piece to legal place
+- Capture Handle Castling
+- Enpassant
+- Detect Check
+- Detect Mate
