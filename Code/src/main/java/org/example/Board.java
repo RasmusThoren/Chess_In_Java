@@ -7,6 +7,10 @@ public class Board {
     private List<Piece> pieces;
     private List<Position> positions;
 
+    public List<Piece> getPieces() {
+        return pieces;
+    }
+
     public Board() {
         this.pieces = new ArrayList<>();
         this.positions = new ArrayList<>();
@@ -18,7 +22,7 @@ public class Board {
         for (int i = 0; i < 64; i++) {
             positions.add(new Position(i, null, getPositionName(i), (i / 8 + i % 8) % 2 == 0 ? Color.WHITE : Color.BLACK));
         }
-
+        System.out.println(this.getPositions());
         // Place pieces
         placePieces();
     }
@@ -31,7 +35,7 @@ public class Board {
         }
 
         // Place other pieces
-        PieceType[] pieceOrder = {PieceType.ROOK, PieceType.KNIGHT, PieceType.BISHOP, PieceType.QUEEN, PieceType.KING, PieceType.BISHOP, PieceType.KNIGHT, PieceType.ROOK};
+        PieceType[] pieceOrder = {PieceType.ROOK, PieceType.KNIGHT, PieceType.BISHOP, PieceType.KING, PieceType.QUEEN, PieceType.BISHOP, PieceType.KNIGHT, PieceType.ROOK};
 
         for (int i = 0; i < 8; i++) {
             positions.get(i).PlacePieceOnPos(new Piece(pieceOrder[i], Color.WHITE));
@@ -39,9 +43,18 @@ public class Board {
         }
     }
 
+    public Position getPositionFromName(String name) {
+        for (Position position : positions) {
+            if (position.getName().equals(name)) {
+                return position;
+            }
+        }
+        return null;
+    }
+
     private String getPositionName(int index) {
-        char file = (char) ('a' + index % 8);
-        int rank = 8 - index / 8;
+        char file = (char) ('h' - (index % 8));
+        int rank = (index / 8) + 1;
         return "" + file + rank;
     }
 
@@ -49,20 +62,40 @@ public class Board {
         return positions;
     }
 
-    @Override
-    public String toString() {
+    public String printBoard(Color PieceColor) {
+        List<Position> pos = getPositions();
+        String colMarker = "         H     G     F     E     D     C     B     A \n";
+        if (PieceColor == Color.WHITE) {
+            pos= pos.reversed();
+            colMarker = "         A     B     C     D     E     F     G     H \n \n";
+        }
         StringBuilder sb = new StringBuilder();
-        sb.append("      A     B     C     D     E     F     G     H \n");
+        sb.append(colMarker);
         for (int i = 0; i < 8; i++) {
-            sb.append(i + "  ");
+            if (PieceColor == Color.BLACK) {
+                sb.append(i+1).append("     ");
+            }else {
+                sb.append(8-i).append("     ");
+            }
             for (int j = 0; j < 8; j++) {
                 int offset = i * 8;
                 sb.append('|');
-                sb.append(positions.get(offset+j).toString());
+                sb.append(pos.get(offset+j).toString());
             }
             sb.append('|');
-            sb.append("\n   --------------------------------------------------\n");
+            if (PieceColor == Color.BLACK) {
+                sb.append("     ").append(i+1);
+            }else {
+                sb.append("     ").append(8-i);
+            }
+            sb.append("\n \n");
         }
+        sb.append(colMarker);
         return sb.toString();
+    }
+
+    public Position getPositionfromRowColumn(int row, int col) {
+        int index = row * 8 + col;
+        return positions.get(index);
     }
 }

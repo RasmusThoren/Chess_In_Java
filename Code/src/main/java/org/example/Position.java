@@ -33,13 +33,27 @@ public class Position {
         return color;
     }
 
+    public int getColumn(){
+        return this.index % 8;
+    }
+
+    public int getRow(){
+        return this.index / 8;
+    }
+
     @Override
     public String toString() {
         if(this.pieceStandingOn == null){
-            return "  -  ";
+            return ("  -  " );
         }
         else {
             return this.pieceStandingOn.toString();
         }
     }
+
+//    @Override
+//    public String toString() {
+//        return this.getName();
+//    }
+
 }

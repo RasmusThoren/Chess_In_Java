@@ -21,6 +21,9 @@ public class Piece {
     @Override
     public String toString() {
         String abr = Character.toString(type.toString().charAt(0));
+        if (type == PieceType.KNIGHT) {
+            abr = "n";
+        }
         if (color == Color.BLACK) {
             return "  " + abr.toLowerCase() + "  ";
         } else {
