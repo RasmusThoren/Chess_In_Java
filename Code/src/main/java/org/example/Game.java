@@ -5,6 +5,8 @@ import java.util.function.DoubleToIntFunction;
 public class Game {
     private Board board;
     private Color playerTurn;
+    private Player p1;
+    private Player p2;
 
     public Board getBoard() {
         return board;
@@ -17,6 +19,8 @@ public class Game {
     public Game() {
         this.board = new Board();
         this.playerTurn = Color.WHITE;
+        this.p1 = new Player();
+        this.p2 = new Player();
     }
 
     public boolean legalMoves(Position start, Position end) {
