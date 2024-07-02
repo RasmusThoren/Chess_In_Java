@@ -98,4 +98,18 @@ public class Board {
         int index = row * 8 + col;
         return positions.get(index);
     }
+
+    public Position getKingPosition(Color color) {
+        for (Position pos : getPositions()) {
+            Piece piece = pos.getPieceStandingOn();
+            if (piece != null) {
+                if (piece.getColor() == color && piece.getType() == PieceType.KING) {
+                    return pos;
+                }
+            }
+        }
+        throw new IllegalStateException("King not found on the board");
+    }
 }
+
+

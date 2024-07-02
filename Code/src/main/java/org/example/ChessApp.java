@@ -10,6 +10,7 @@ public class ChessApp {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println(board.printBoard(game.getPlayerTurn()));
+            boolean isChecked = game.isColorChecked(game.getPlayerTurn());
             System.out.println(game.getPlayerTurn().toString() + ", To Move");
             Move move = inputToMove(scanner.nextLine());
             while (!game.makeMove(move)) {

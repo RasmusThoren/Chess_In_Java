@@ -81,19 +81,14 @@ public class Game {
         int endRow = end.getRow();
         int endCol = end.getColumn();
 
-        // If color is same, move is never legal
-        if (end.getPieceStandingOn() != null){
-            return end.getPieceStandingOn().getColor() != start.getPieceStandingOn().getColor();
-
         // Checks if the move fulfills the L shape
-        }else {
-            if (Math.abs(startRow - endRow) == 2 && Math.abs(startCol - endCol) == 1) {
-                return true;
-            }
-            if (Math.abs(startRow - endRow) == 1 && Math.abs(startCol - endCol) == 2) {
-                return true;
-            }
+        if (Math.abs(startRow - endRow) == 2 && Math.abs(startCol - endCol) == 1) {
+            return true;
         }
+        if (Math.abs(startRow - endRow) == 1 && Math.abs(startCol - endCol) == 2) {
+            return true;
+        }
+
         return false;
     }
 
@@ -141,8 +136,6 @@ public class Game {
             startIndex = endIndex;
             endIndex = temp;
         }
-
-        System.out.println(startIndex + " " + endIndex);
         // Check no pieces between
         if (startRow == endRow){
             for (int i = startIndex + 1 ; i < endIndex; i++){
@@ -150,6 +143,7 @@ public class Game {
                     return false;
                 }
             }
+            return true;
         }
         if (startCol==endCol) {
             for (int i = startIndex + 8; i < endIndex; i+=8){
@@ -157,8 +151,9 @@ public class Game {
                     return false;
                 }
             }
+            return true;
         }
-        return true;
+        return false;
     }
 
     private boolean checkQueenMove(Position start, Position end) {
@@ -196,8 +191,19 @@ public class Game {
         if(!legalMoves(start, end)){
             return false;
         }
+        // place piece on new position
+        Piece startPiece = start.getPieceStandingOn();
+        Piece endPiece = end.getPieceStandingOn();
         end.PlacePieceOnPos(start.getPieceStandingOn());
         start.PlacePieceOnPos(null);
+
+        // If player is in check after move revert and return false
+        if (isColorChecked(playerTurn)){
+            end.PlacePieceOnPos(endPiece);
+            start.PlacePieceOnPos(startPiece);
+            return false;
+        }
+
         if (this.playerTurn == Color.BLACK) {
             this.playerTurn = Color.WHITE;
         }else {
@@ -205,4 +211,22 @@ public class Game {
         }
         return true;
     }
+
+    public boolean isColorChecked(Color color) {
+        Position kingPos = board.getKingPosition(color);
+        for (Position pos : board.getPositions()) {
+            Piece piece = pos.getPieceStandingOn();
+            if (piece != null) {
+                if(piece.getColor() != color){
+                    if (legalMoves(pos,kingPos)) {
+                        System.out.println(pos + " " + kingPos);
+                        System.out.println("Cheked from " + pos.getName());
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }
+
