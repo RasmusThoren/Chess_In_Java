@@ -8,9 +8,8 @@ public class ChessApp {
         Game game = new Game();
         Board board = game.getBoard();
         Scanner scanner = new Scanner(System.in);
-        while (true) {
+        while (!game.isCheckmate(game.getPlayerTurn())) {
             System.out.println(board.printBoard(game.getPlayerTurn()));
-            boolean isChecked = game.isColorChecked(game.getPlayerTurn());
             System.out.println(game.getPlayerTurn().toString() + ", To Move");
             Move move = inputToMove(scanner.nextLine());
             while (!game.makeMove(move)) {
@@ -18,6 +17,9 @@ public class ChessApp {
                 move = inputToMove(scanner.nextLine());
             }
         }
+        game.switchPlayerTurn();
+        System.out.println("CHECKMATE");
+        System.out.println(game.getPlayerTurn() + " WINS");
     }
 
     private static Move inputToMove(String input) {

@@ -198,29 +198,22 @@ public class Game {
         start.PlacePieceOnPos(null);
 
         // If player is in check after move revert and return false
-        if (isColorChecked(playerTurn)){
+        Position kingPos = board.getKingPosition(playerTurn);
+        if (isColorChecked(playerTurn,kingPos)){
             end.PlacePieceOnPos(endPiece);
             start.PlacePieceOnPos(startPiece);
             return false;
         }
-
-        if (this.playerTurn == Color.BLACK) {
-            this.playerTurn = Color.WHITE;
-        }else {
-            this.playerTurn = Color.BLACK;
-        }
+        switchPlayerTurn();
         return true;
     }
 
-    public boolean isColorChecked(Color color) {
-        Position kingPos = board.getKingPosition(color);
+    public boolean isColorChecked(Color color,Position kingPos) {
         for (Position pos : board.getPositions()) {
             Piece piece = pos.getPieceStandingOn();
             if (piece != null) {
                 if(piece.getColor() != color){
                     if (legalMoves(pos,kingPos)) {
-                        System.out.println(pos + " " + kingPos);
-                        System.out.println("Cheked from " + pos.getName());
                         return true;
                     }
                 }
@@ -228,5 +221,56 @@ public class Game {
         }
         return false;
     }
+
+    public boolean isCheckmate(Color color) {
+    // If the color is not in check, it's not checkmate
+    Position kingPos = board.getKingPosition(color);
+    if (!isColorChecked(color,kingPos)) {
+        return false;
+    }
+
+    for (Position start : board.getPositions()) {
+        Piece piece = start.getPieceStandingOn();
+
+        if (piece != null) {
+            if (piece.getColor() == color) {
+                // Generate all possible moves for the piece
+                for (Position end : board.getPositions()) {
+                    // Check if the move is legal
+                    if (legalMoves(start, end)) {
+                        // Temporarily make the move
+                        Piece capturedPiece = end.getPieceStandingOn();
+                        end.PlacePieceOnPos(piece);
+                        start.PlacePieceOnPos(null);
+                        boolean stillInCheck;
+                        if (piece.getType() == PieceType.KING){
+                            stillInCheck = isColorChecked(color, end);
+                        } else {
+                            stillInCheck = isColorChecked(color, kingPos);
+                        }
+                        // Undo the move
+                        start.PlacePieceOnPos(piece);
+                        end.PlacePieceOnPos(capturedPiece);
+
+                        if (!stillInCheck) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+public void switchPlayerTurn(){
+        if (this.playerTurn.equals(Color.BLACK)) {
+            playerTurn = Color.WHITE;
+        }else {
+            playerTurn = Color.BLACK;
+        }
+}
+
 }
 
