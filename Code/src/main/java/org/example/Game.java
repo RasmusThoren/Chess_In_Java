@@ -173,6 +173,7 @@ public class Game {
                 return true;
             }
         }
+        if
         return false;
     }
 
@@ -203,6 +204,30 @@ public class Game {
             end.PlacePieceOnPos(endPiece);
             start.PlacePieceOnPos(startPiece);
             return false;
+        }
+        if (start.getPieceStandingOn().getType() == PieceType.KING) {
+            if (playerTurn == Color.WHITE){
+                p1.UnenabelKingCastlingRight();
+                p1.UnenableQueenCastlingRight();
+            } else{
+                p2.UnenabelKingCastlingRight();
+                p2.UnenableQueenCastlingRight();
+            }
+        }
+        if (start.getPieceStandingOn().getType() == PieceType.ROOK) {
+            if (playerTurn == Color.WHITE){
+                if (start.getColumn() == 0){
+                    p1.UnenableQueenCastlingRight();
+                } else {
+                    p1.UnenabelKingCastlingRight();
+                }
+            } else {
+                if (start.getColumn() == 0){
+                    p1.UnenableQueenCastlingRight();
+                } else {
+                    p1.UnenabelKingCastlingRight();
+                }
+            }
         }
         switchPlayerTurn();
         return true;
@@ -254,23 +279,21 @@ public class Game {
 
                         if (!stillInCheck) {
                             return false;
+                            }
                         }
                     }
                 }
             }
         }
+    return true;
     }
 
-    return true;
-}
-
-public void switchPlayerTurn(){
-        if (this.playerTurn.equals(Color.BLACK)) {
-            playerTurn = Color.WHITE;
-        }else {
-            playerTurn = Color.BLACK;
-        }
-}
-
+    public void switchPlayerTurn(){
+            if (this.playerTurn.equals(Color.BLACK)) {
+                playerTurn = Color.WHITE;
+            }else {
+                playerTurn = Color.BLACK;
+            }
+    }
 }
 

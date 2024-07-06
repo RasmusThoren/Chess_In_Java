@@ -18,6 +18,7 @@ public class ChessApp {
             }
         }
         game.switchPlayerTurn();
+        System.out.println(board.printBoard(game.getPlayerTurn()));
         System.out.println("CHECKMATE");
         System.out.println(game.getPlayerTurn() + " WINS");
     }
