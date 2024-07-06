@@ -173,7 +173,6 @@ public class Game {
                 return true;
             }
         }
-        if
         return false;
     }
 
@@ -205,27 +204,30 @@ public class Game {
             start.PlacePieceOnPos(startPiece);
             return false;
         }
-        if (start.getPieceStandingOn().getType() == PieceType.KING) {
-            if (playerTurn == Color.WHITE){
-                p1.UnenabelKingCastlingRight();
-                p1.UnenableQueenCastlingRight();
-            } else{
-                p2.UnenabelKingCastlingRight();
-                p2.UnenableQueenCastlingRight();
-            }
-        }
-        if (start.getPieceStandingOn().getType() == PieceType.ROOK) {
-            if (playerTurn == Color.WHITE){
-                if (start.getColumn() == 0){
+        if (start.getPieceStandingOn() != null) {
+            if (start.getPieceStandingOn().getType() == PieceType.KING) {
+                if (playerTurn == Color.WHITE) {
+                    p1.UnenabelKingCastlingRight();
                     p1.UnenableQueenCastlingRight();
                 } else {
-                    p1.UnenabelKingCastlingRight();
+                    p2.UnenabelKingCastlingRight();
+                    p2.UnenableQueenCastlingRight();
                 }
-            } else {
-                if (start.getColumn() == 0){
-                    p1.UnenableQueenCastlingRight();
+            }
+
+            if (start.getPieceStandingOn().getType() == PieceType.ROOK) {
+                if (playerTurn == Color.WHITE) {
+                    if (start.getColumn() == 0) {
+                        p1.UnenableQueenCastlingRight();
+                    } else {
+                        p1.UnenabelKingCastlingRight();
+                    }
                 } else {
-                    p1.UnenabelKingCastlingRight();
+                    if (start.getColumn() == 0) {
+                        p1.UnenableQueenCastlingRight();
+                    } else {
+                        p1.UnenabelKingCastlingRight();
+                    }
                 }
             }
         }
